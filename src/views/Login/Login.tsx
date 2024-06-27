@@ -7,6 +7,9 @@ import Typography from '@mui/material/Typography';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LoginApi } from '../../services/Login/login';
+import { REDIRECT_URI_KEY } from '../../utils/constants';
+import { useNavigate } from 'react-router-dom';
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email'),
@@ -31,11 +34,20 @@ const Login = () => {
     formState: { errors, touchedFields, defaultValues },
   } = useForm<FormData>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: 'wer', password: '' },
+    defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = (data: FormData) => {
-    console.log(data); // call api with submitted data
+  const navigate = useNavigate();
+  const query = new URLSearchParams(window.location.search);
+
+  const onSubmit = async (data: FormData) => {
+    const { error } = await LoginApi.login(data.email, data.password);
+    // TODO manage / display error
+    if (error) console.log('error');
+    else {
+      const goToUrl = `${window.location.origin}${query.get(REDIRECT_URI_KEY)}`;
+      navigate(goToUrl);
+    }
   };
 
   return (

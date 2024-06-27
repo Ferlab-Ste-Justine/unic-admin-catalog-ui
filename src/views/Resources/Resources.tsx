@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { increment, selectCount } from '../../store/Counter/CounterSlice';
 import ButtonUsage from '../../components/ButtonUsage';
+import { LoginApi } from '../../services/Login/login';
 
 const Resources = (): React.ReactElement => {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const Resources = (): React.ReactElement => {
     <>
       <h3>Resources {value}</h3>
       <ButtonUsage label="Login" onClick={() => dispatch(increment())} />
+      <ButtonUsage label="test" onClick={() => LoginApi.test()} />
     </>
   );
 };
