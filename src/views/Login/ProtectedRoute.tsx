@@ -7,8 +7,8 @@ type TProtectedRoute = {
 };
 
 const ProtectedRoute = ({ children }: TProtectedRoute) => {
-  const isAuthenticated = false;
-  // TODO isValid token from local storage
+  // TODO check if authenticated call back /users/me
+  const isAuthenticated = true;
   const location = useLocation();
 
   if (!isAuthenticated) {
