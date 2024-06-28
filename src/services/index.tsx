@@ -5,10 +5,17 @@ export const apiInstance = axios.create({
   withCredentials: true,
 });
 
+export type ServiceResponse<T> = {
+  success: boolean;
+  message: string;
+  responseObject: T;
+  statusCode: number;
+};
+
 interface ApiResponse<T> {
   data: T | undefined;
-  response: AxiosResponse;
-  error: AxiosError | undefined;
+  response: AxiosResponse | AxiosError;
+  error: ServiceResponse<T> | undefined;
 }
 
 //TODO interceptor ???
@@ -43,17 +50,17 @@ interface ApiResponse<T> {
 
 export const sendRequest = async <T,>(config: AxiosRequestConfig) => {
   return apiInstance
-    .request<T>(config)
+    .request<ServiceResponse<T>>(config)
     .then(
       (response): ApiResponse<T> => ({
         response: response,
-        data: response.data,
+        data: response.data.responseObject,
         error: undefined,
       })
     )
     .catch(
       (err): ApiResponse<T> => ({
-        response: err.response,
+        response: err,
         data: undefined,
         error: err.response.data,
       })

@@ -1,5 +1,4 @@
 import { sendRequest } from '..';
-import { ServiceResponse } from '../type';
 
 const login = (email: string, password: string) =>
   sendRequest({
@@ -23,7 +22,7 @@ const register = (email: string, name: string, password: string) =>
   });
 
 const verify = () =>
-  sendRequest<ServiceResponse<{ isValid: boolean }>>({
+  sendRequest<{ isValid: boolean }>({
     method: 'GET',
     url: '/users/verify',
   });
