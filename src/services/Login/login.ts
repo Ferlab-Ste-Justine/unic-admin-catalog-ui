@@ -1,31 +1,49 @@
-import apiInstance, { sendRequest } from '..';
-
-export const headers = (contentType: string = 'application/json') => ({
-  'Content-Type': contentType,
-});
+import { sendRequest } from '..';
+import { ServiceResponse } from '../type';
 
 const login = (email: string, password: string) =>
   sendRequest({
     method: 'POST',
     url: '/users/login',
-    // headers: headers(),
     data: {
       email,
       password,
     },
   });
 
-// const test = () =>
-//   sendRequest({
-//     method: 'GET',
-//     url: '/variables',
-//   });
+const register = (email: string, name: string, password: string) =>
+  sendRequest({
+    method: 'POST',
+    url: '/users/register',
+    data: {
+      name,
+      email,
+      password,
+    },
+  });
 
-const test = () => {
-  return apiInstance.get('/variables', { withCredentials: true });
-};
+const verify = () =>
+  sendRequest<ServiceResponse<{ isValid: boolean }>>({
+    method: 'GET',
+    url: '/users/verify',
+  });
 
-// Register
-// Logout
+const test = () =>
+  sendRequest({
+    method: 'GET',
+    url: '/variables',
+  });
 
-export const LoginApi = { login, test };
+const analysts = () =>
+  sendRequest({
+    method: 'GET',
+    url: '/analysts',
+  });
+
+const logout = () =>
+  sendRequest({
+    method: 'POST',
+    url: '/users/logout',
+  });
+
+export const LoginApi = { login, logout, register, verify, test, analysts };

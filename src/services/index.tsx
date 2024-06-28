@@ -55,7 +55,7 @@ export const sendRequest = async <T,>(config: AxiosRequestConfig) => {
       (err): ApiResponse<T> => ({
         response: err.response,
         data: undefined,
-        error: err,
+        error: err.response.data,
       })
     );
 };

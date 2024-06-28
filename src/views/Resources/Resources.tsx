@@ -12,7 +12,9 @@ const Resources = (): React.ReactElement => {
     <>
       <h3>Resources {value}</h3>
       <ButtonUsage label="Login" onClick={() => dispatch(increment())} />
+      <ButtonUsage label="analysts" onClick={() => LoginApi.analysts()} />
       <ButtonUsage label="test" onClick={() => LoginApi.test()} />
+      <ButtonUsage label="logout" onClick={() => LoginApi.logout()} />
     </>
   );
 };

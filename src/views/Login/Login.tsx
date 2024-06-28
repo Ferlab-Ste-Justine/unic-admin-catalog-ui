@@ -5,11 +5,13 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginApi } from '../../services/Login/login';
 import { REDIRECT_URI_KEY } from '../../utils/constants';
 import { useNavigate } from 'react-router-dom';
+import { Alert } from '@mui/material';
+import { useState } from 'react';
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email'),
@@ -28,6 +30,7 @@ const loginSchema = z.object({
 type FormData = z.infer<typeof loginSchema>;
 
 const Login = () => {
+  const [errorMessage, setErrorMesage] = useState('');
   const {
     register,
     handleSubmit,
@@ -40,10 +43,9 @@ const Login = () => {
   const navigate = useNavigate();
   const query = new URLSearchParams(window.location.search);
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
     const { error } = await LoginApi.login(data.email, data.password);
-    // TODO manage / display error
-    if (error) console.log('error');
+    if (error) setErrorMesage(error.message);
     else {
       const goToUrl = `${window.location.origin}${query.get(REDIRECT_URI_KEY)}`;
       navigate(goToUrl);
@@ -60,7 +62,8 @@ const Login = () => {
       <Grid item>
         <Box
           sx={{
-            my: 8,
+            mt: 0,
+            mb: 8,
             mx: 4,
             display: 'flex',
             flexDirection: 'column',
@@ -80,6 +83,11 @@ const Login = () => {
             Sign in
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
+            {errorMessage && (
+              <Alert severity="error" sx={{ mb: 2, mt: 4 }}>
+                {errorMessage}
+              </Alert>
+            )}
             <TextField
               label="Email"
               fullWidth
